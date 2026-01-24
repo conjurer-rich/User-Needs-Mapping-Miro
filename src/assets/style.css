@@ -98,6 +98,7 @@ img {
   align-items: center;
   justify-content: center;
   margin-bottom: var(--space-xsmall);
+  pointer-events: none;
 }
 
 .shape-label {
@@ -105,6 +106,7 @@ img {
   color: var(--secondary-text-color);
   text-align: center;
   white-space: nowrap;
+  pointer-events: none;
 }
 
 /* Shape Previews */
@@ -135,6 +137,7 @@ img {
 .preview-user svg {
   width: 100%;
   height: 100%;
+  pointer-events: none;
 }
 
 .preview-rectangle {

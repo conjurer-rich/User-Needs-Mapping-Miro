@@ -1,16 +1,37 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { createStarterTemplate } from './utils/template';
+import { createShape, ShapeType } from './utils/shapes';
 import './assets/style.css';
 
-type ShapeType =
-  | 'user'
-  | 'userNeed'
-  | 'internalCapability'
-  | 'externalCapability'
-  | 'systemProcess'
-  | 'connector'
-  | 'teamBoundary';
+// Register drop handler for drag-and-drop from panel to board
+async function initDropHandler() {
+  miro.board.ui.on('drop', async ({ x, y, target }) => {
+    // Find the shape type from the dropped element or its parents
+    let element = target as HTMLElement | null;
+    let shapeType: ShapeType | undefined;
+
+    while (element) {
+      shapeType = element.dataset?.shapeType as ShapeType | undefined;
+      if (shapeType) break;
+      element = element.parentElement;
+    }
+
+    if (!shapeType) {
+      console.warn('No shape type found on dropped element');
+      return;
+    }
+
+    try {
+      await createShape(shapeType, x, y);
+    } catch (error) {
+      console.error(`Failed to create shape:`, error);
+    }
+  });
+}
+
+// Initialize drop handler
+initDropHandler();
 
 interface ShapeItemProps {
   type: ShapeType;
