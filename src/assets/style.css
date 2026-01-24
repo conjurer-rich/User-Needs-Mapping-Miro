@@ -1,0 +1,186 @@
+@import 'mirotone/dist/styles.css';
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  margin: 0;
+  font-family: var(--font-family);
+}
+
+#root {
+  width: 100%;
+  overflow: auto;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Panel Container */
+.panel-container {
+  padding: var(--space-medium);
+}
+
+.panel-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 var(--space-xsmall) 0;
+  color: var(--text-color);
+}
+
+.panel-description {
+  font-size: 12px;
+  color: var(--secondary-text-color);
+  margin: 0 0 var(--space-medium) 0;
+}
+
+/* Template Button */
+.template-button {
+  width: 100%;
+  margin-bottom: var(--space-large);
+}
+
+/* Shape Sections */
+.shape-section {
+  margin-bottom: var(--space-medium);
+}
+
+.section-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--secondary-text-color);
+  margin: 0 0 var(--space-small) 0;
+  padding-bottom: var(--space-xsmall);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Shape Grid */
+.shape-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-small);
+}
+
+/* Shape Item (Draggable) */
+.shape-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-small);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  cursor: grab;
+  transition: all 0.15s ease;
+  background: var(--app-background-color);
+}
+
+.shape-item:hover {
+  border-color: var(--primary-color);
+  background: var(--hover-color);
+}
+
+.shape-item:active {
+  cursor: grabbing;
+}
+
+.shape-preview {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-xsmall);
+}
+
+.shape-label {
+  font-size: 10px;
+  color: var(--secondary-text-color);
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Shape Previews */
+.preview-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.preview-user-need {
+  background-color: #4262FF;
+}
+
+.preview-internal {
+  background-color: #FFFFFF;
+  border: 2px solid #1A1A1A;
+}
+
+.preview-external {
+  background-color: #333333;
+}
+
+.preview-user {
+  width: 28px;
+  height: 28px;
+}
+
+.preview-user svg {
+  width: 100%;
+  height: 100%;
+}
+
+.preview-rectangle {
+  width: 36px;
+  height: 24px;
+  background-color: #FFFFFF;
+  border: 2px solid #1A1A1A;
+  border-radius: 2px;
+}
+
+.preview-connector {
+  width: 36px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.connector-line {
+  width: 100%;
+  height: 2px;
+  background-color: #666666;
+}
+
+.preview-boundary {
+  width: 36px;
+  height: 28px;
+  background-color: #FFF3CD;
+  border: 2px dashed #E6C200;
+  border-radius: 6px;
+}
+
+/* Panel Footer */
+.panel-footer {
+  margin-top: var(--space-large);
+  padding-top: var(--space-medium);
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.learn-more-link {
+  font-size: 11px;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.learn-more-link:hover {
+  text-decoration: underline;
+}

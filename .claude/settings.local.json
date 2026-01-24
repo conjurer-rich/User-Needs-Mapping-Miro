@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:userneedsmapping.com)",
+      "WebFetch(domain:developers.miro.com)",
+      "Bash(npx create-miro-app@latest:*)",
+      "Bash(npm run build:*)",
+      "Bash(npx tsc:*)"
+    ]
+  }
+}

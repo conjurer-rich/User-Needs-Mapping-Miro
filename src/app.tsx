@@ -1,0 +1,133 @@
+import * as React from 'react';
+import { createRoot } from 'react-dom/client';
+import { createStarterTemplate } from './utils/template';
+import './assets/style.css';
+
+type ShapeType =
+  | 'user'
+  | 'userNeed'
+  | 'internalCapability'
+  | 'externalCapability'
+  | 'systemProcess'
+  | 'connector'
+  | 'teamBoundary';
+
+interface ShapeItemProps {
+  type: ShapeType;
+  label: string;
+  children: React.ReactNode;
+}
+
+const ShapeItem: React.FC<ShapeItemProps> = ({ type, label, children }) => {
+  return (
+    <div
+      className="miro-draggable shape-item"
+      data-shape-type={type}
+      title={`Drag to add ${label}`}
+    >
+      <div className="shape-preview">{children}</div>
+      <span className="shape-label">{label}</span>
+    </div>
+  );
+};
+
+const App: React.FC = () => {
+  const [isCreatingTemplate, setIsCreatingTemplate] = React.useState(false);
+
+  const handleCreateTemplate = async () => {
+    setIsCreatingTemplate(true);
+    try {
+      await createStarterTemplate();
+    } catch (error) {
+      console.error('Failed to create template:', error);
+    } finally {
+      setIsCreatingTemplate(false);
+    }
+  };
+
+  return (
+    <div className="panel-container">
+      <h2 className="panel-title">User Needs Mapping</h2>
+      <p className="panel-description">
+        Drag shapes onto the board to build your map
+      </p>
+
+      <button
+        className="button button-primary template-button"
+        onClick={handleCreateTemplate}
+        disabled={isCreatingTemplate}
+      >
+        {isCreatingTemplate ? 'Creating...' : 'Create Starter Template'}
+      </button>
+
+      <div className="shape-section">
+        <h3 className="section-title">Users & Needs</h3>
+        <div className="shape-grid">
+          <ShapeItem type="user" label="User">
+            <div className="preview-user">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#333" strokeWidth="2">
+                <circle cx="12" cy="7" r="4" />
+                <path d="M5.5 21a6.5 6.5 0 0 1 13 0" />
+              </svg>
+            </div>
+          </ShapeItem>
+          <ShapeItem type="userNeed" label="User Need">
+            <div className="preview-circle preview-user-need" />
+          </ShapeItem>
+        </div>
+      </div>
+
+      <div className="shape-section">
+        <h3 className="section-title">Capabilities</h3>
+        <div className="shape-grid">
+          <ShapeItem type="internalCapability" label="Internal">
+            <div className="preview-circle preview-internal" />
+          </ShapeItem>
+          <ShapeItem type="externalCapability" label="External">
+            <div className="preview-circle preview-external" />
+          </ShapeItem>
+          <ShapeItem type="systemProcess" label="System">
+            <div className="preview-rectangle" />
+          </ShapeItem>
+        </div>
+      </div>
+
+      <div className="shape-section">
+        <h3 className="section-title">Connections</h3>
+        <div className="shape-grid">
+          <ShapeItem type="connector" label="Depends On">
+            <div className="preview-connector">
+              <div className="connector-line" />
+            </div>
+          </ShapeItem>
+        </div>
+      </div>
+
+      <div className="shape-section">
+        <h3 className="section-title">Boundaries</h3>
+        <div className="shape-grid">
+          <ShapeItem type="teamBoundary" label="Team Boundary">
+            <div className="preview-boundary" />
+          </ShapeItem>
+        </div>
+      </div>
+
+      <div className="panel-footer">
+        <a
+          href="https://userneedsmapping.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="learn-more-link"
+        >
+          Learn more about User Needs Mapping
+        </a>
+      </div>
+    </div>
+  );
+};
+
+const container = document.getElementById('root');
+if (container) {
+  const root = createRoot(container);
+  root.render(<App />);
+}
