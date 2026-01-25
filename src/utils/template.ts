@@ -11,8 +11,9 @@ import {
 
 const TEMPLATE_WIDTH = 1920;
 const TEMPLATE_HEIGHT = 1080;
-const ROW_HEIGHT = 200;
+const ROW_HEIGHT = 100; // Reduced spacing
 const LABEL_WIDTH = 120;
+const LABEL_HEIGHT = 30;
 
 const COLORS = {
   labelBg: 'transparent',
@@ -31,13 +32,6 @@ const ROWS: RowConfig[] = [
   { label: 'Users', yOffset: 0 },
   { label: 'User needs', yOffset: ROW_HEIGHT },
   { label: 'Capabilities', yOffset: ROW_HEIGHT * 2 },
-];
-
-// Value chain visibility labels (rotated 90 degrees)
-const VALUE_CHAIN_LABELS: RowConfig[] = [
-  { label: 'Visible', yOffset: ROW_HEIGHT * 3, isValueChainLabel: true },
-  { label: 'Value Chain', yOffset: ROW_HEIGHT * 4, isValueChainLabel: true },
-  { label: 'Invisible', yOffset: ROW_HEIGHT * 5, isValueChainLabel: true },
 ];
 
 export async function createStarterTemplate(): Promise<void> {
@@ -63,38 +57,49 @@ export async function createStarterTemplate(): Promise<void> {
 
   // Calculate positions relative to frame center
   const startX = frameX;
-  const startY = frameY - TEMPLATE_HEIGHT / 2 + ROW_HEIGHT;
+  const startY = frameY - TEMPLATE_HEIGHT / 2 + ROW_HEIGHT / 2 + 50; // Closer to top
 
   // Create main row labels on the left side (Users, User needs, Capabilities)
+  // Align labels to the top of each row
   for (const row of ROWS) {
     const shape = await miro.board.createShape({
       shape: 'rectangle',
       x: startX - TEMPLATE_WIDTH / 2 + LABEL_WIDTH / 2 + 50,
       y: startY + row.yOffset,
       width: LABEL_WIDTH,
-      height: ROW_HEIGHT - 10,
+      height: LABEL_HEIGHT,
       content: `<p style="font-size: 12px; font-weight: bold; writing-mode: vertical-rl; transform: rotate(180deg);">${row.label}</p>`,
       style: {
         fillColor: COLORS.labelBg,
         borderColor: COLORS.border,
         borderWidth: 1,
+        textAlign: 'right'
       },
     });
     itemsToAdd.push(shape);
   }
 
+
+
   // Position for value chain axis (to the left of main content)
-  const axisX = startX - TEMPLATE_WIDTH / 2 + LABEL_WIDTH / 2 + 50;
-  const visibleY = startY + VALUE_CHAIN_LABELS[0].yOffset;
-  const invisibleY = startY + VALUE_CHAIN_LABELS[2].yOffset;
+  const axisX = startX - TEMPLATE_WIDTH / 2 + LABEL_WIDTH / 2 + 100;
+  const axisStartY = startY + (ROW_HEIGHT * 3) - 30; // Start near after "Capabilities"
+  const axisEndY = frameY + TEMPLATE_HEIGHT / 2 - 50; // Extend close to bottom of frame
+
+    // Value chain visibility labels (rotated 90 degrees)
+  const VALUE_CHAIN_LABELS: RowConfig[] = [
+    { label: 'Visible', yOffset: axisStartY + 40, isValueChainLabel: true },
+    { label: 'Value Chain', yOffset: axisStartY + ((axisEndY - axisStartY)/2), isValueChainLabel: true },
+    { label: 'Invisible', yOffset: axisEndY - 40, isValueChainLabel: true },
+  ];
 
   // Create vertical axis line (Value Chain Visibility Axis)
   const axisLine = await miro.board.createConnector({
     start: {
-      position: { x: axisX, y: visibleY - ROW_HEIGHT / 2 + 20 },
+      position: { x: axisX, y: axisStartY },
     },
     end: {
-      position: { x: axisX, y: invisibleY + ROW_HEIGHT / 2 - 20 },
+      position: { x: axisX, y: axisEndY },
     },
     shape: 'straight',
     style: {
@@ -110,9 +115,9 @@ export async function createStarterTemplate(): Promise<void> {
   for (const row of VALUE_CHAIN_LABELS) {
     const text = await miro.board.createText({
       x: axisX - 25,
-      y: startY + row.yOffset,
+      y: row.yOffset,
       width: 60,
-      content: `<p style="font-size: 11px; font-weight: 500; writing-mode: vertical-rl; transform: rotate(180deg);">${row.label}</p>`,
+      content: `<p style="font-size: 11px; font-weight: 500; writing-mode: vertical-rl;">${row.label}</p>`,
       style: {
         textAlign: 'center',
       },
@@ -121,8 +126,9 @@ export async function createStarterTemplate(): Promise<void> {
     itemsToAdd.push(text);
   }
 
-  // Add a "Key" legend horizontally, inline with the Users row
-  const legendStartX = startX - TEMPLATE_WIDTH / 2 + LABEL_WIDTH + 100;
+  // Add a "Key" legend horizontally on the right, inline with the Users row
+  const legendWidth = 5 * 120 + 80; // 5 items * spacing + padding
+  const legendStartX = startX + TEMPLATE_WIDTH / 2 - legendWidth;
   const legendItems = await createKeyLegend(legendStartX, startY);
   itemsToAdd.push(...legendItems);
 
