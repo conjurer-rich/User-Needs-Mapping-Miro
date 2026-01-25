@@ -10,13 +10,15 @@ export type ShapeType =
   | 'teamBoundary';
 
 // Shape dimensions
-const CIRCLE_SIZE = 60;
+const CIRCLE_SIZE = 35;
 const RECTANGLE_WIDTH = 120;
 const RECTANGLE_HEIGHT = 60;
 const TEAM_BOUNDARY_WIDTH = 400;
 const TEAM_BOUNDARY_HEIGHT = 300;
-const TEXT_OFFSET = 45; // Distance from shape center to text center
+const TEXT_OFFSET = 35; // Distance from shape center to text center
 const TEXT_WIDTH = 120;
+const USER_TEXT_WIDTH = 45;
+const DEFAULT_FONT_SIZE = 14;
 
 // Colors matching the User Needs Mapping visual style
 const COLORS = {
@@ -41,7 +43,7 @@ async function createLabeledShape(
     x,
     y: y + textOffsetY,
     width: TEXT_WIDTH,
-    content: `<p style="font-size: 12px; text-align: center;">${defaultLabel}</p>`,
+    content: `<p style="font-size:${DEFAULT_FONT_SIZE}px; text-align: center;">${defaultLabel}</p>`,
     style: {
       textAlign: 'center',
     },
@@ -55,13 +57,13 @@ async function createLabeledShape(
 }
 
 export async function createUser(x: number, y: number): Promise<void> {
-  const shape = await miro.board.createShape({
+  // Create head (small circle)
+  const head = await miro.board.createShape({
     shape: 'circle',
     x,
-    y,
-    width: CIRCLE_SIZE,
-    height: CIRCLE_SIZE,
-    content: '<p style="font-size: 24px;">👤</p>',
+    y: y - 15,
+    width: 35,
+    height: 35,
     style: {
       fillColor: '#FFFFFF',
       borderColor: COLORS.border,
@@ -69,7 +71,36 @@ export async function createUser(x: number, y: number): Promise<void> {
     },
   });
 
-  await createLabeledShape(shape.id, x, y, 'User');
+  // Create body (larger circle/arc shape)
+  const body = await miro.board.createShape({
+    shape: 'circle',
+    x,
+    y: y + 18,
+    width: 44,
+    height: 44,
+    style: {
+      fillColor: '#FFFFFF',
+      borderColor: COLORS.border,
+      borderWidth: 2,
+    },
+  });
+
+  // Create label
+  const text = await miro.board.createText({
+    x,
+    y: y + TEXT_OFFSET - 12,
+    width: USER_TEXT_WIDTH,
+    content: `<p style="font-size:${DEFAULT_FONT_SIZE}px; text-align: center;">User</p>`,
+    style: {
+      textAlign: 'center',
+      fillColor: '#FFFFFF'
+    },
+  });
+
+  // Group all parts together
+  if (head && body && text) {
+    await miro.board.group({ items: [head, body, text] });
+  }
 }
 
 export async function createUserNeed(x: number, y: number): Promise<void> {
@@ -176,7 +207,7 @@ export async function createTeamBoundary(x: number, y: number): Promise<void> {
     x,
     y: y - TEAM_BOUNDARY_HEIGHT / 2 + 30,
     width: TEAM_BOUNDARY_WIDTH - 40,
-    content: '<p style="font-size: 14px; font-weight: bold; text-align: center;">Team Name</p>',
+    content: `<p style="font-size: ${DEFAULT_FONT_SIZE}px; font-weight: bold; text-align: center;">Team Name</p>`,
     style: {
       textAlign: 'center',
     },
