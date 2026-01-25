@@ -1,7 +1,16 @@
 // Starter template for User Needs Mapping
+import {
+  createUser,
+  createUserNeed,
+  createInternalCapability,
+  createExternalCapability,
+  createConnector as createConnectorShape,
+  createLabeledShape, 
+  CreatedItem,
+} from './shapes';
 
-const TEMPLATE_WIDTH = 1800;
-const TEMPLATE_HEIGHT = 1400;
+const TEMPLATE_WIDTH = 1920;
+const TEMPLATE_HEIGHT = 1080;
 const ROW_HEIGHT = 200;
 const LABEL_WIDTH = 120;
 
@@ -112,11 +121,9 @@ export async function createStarterTemplate(): Promise<void> {
     itemsToAdd.push(text);
   }
 
-  // Add a "Key" legend inside the frame (top right)
-  const legendItems = await createKeyLegend(
-    startX + TEMPLATE_WIDTH / 2 - 150,
-    startY - ROW_HEIGHT / 2
-  );
+  // Add a "Key" legend horizontally, inline with the Users row
+  const legendStartX = startX - TEMPLATE_WIDTH / 2 + LABEL_WIDTH + 100;
+  const legendItems = await createKeyLegend(legendStartX, startY);
   itemsToAdd.push(...legendItems);
 
   // Add all items to the frame
@@ -128,103 +135,39 @@ export async function createStarterTemplate(): Promise<void> {
   await miro.board.viewport.zoomTo(frame);
 }
 
-type BoardItem = Awaited<ReturnType<typeof miro.board.createShape | typeof miro.board.createText | typeof miro.board.createConnector>>;
-
-async function createKeyLegend(x: number, y: number): Promise<BoardItem[]> {
-  const items: BoardItem[] = [];
-  const spacing = 50;
+async function createKeyLegend(x: number, y: number): Promise<CreatedItem[]> {
+  const items: CreatedItem[] = [];
+  const hSpacing = 120; // Horizontal spacing between items
 
   // Key title
   items.push(await miro.board.createText({
-    x,
-    y: y - 40,
-    width: 100,
+    x: x - 40,
+    y,
+    width: 50,
     content: '<p style="font-size: 14px; font-weight: bold;">Key</p>',
   }));
 
-  // User icon
-  items.push(await miro.board.createShape({
-    shape: 'circle',
-    x: x - 30,
-    y,
-    width: 30,
-    height: 30,
-    content: '<p style="font-size: 14px;">👤</p>',
-    style: { fillColor: '#FFFFFF', borderColor: '#1A1A1A', borderWidth: 1 },
-  }));
-  items.push(await miro.board.createText({
-    x: x + 20,
-    y,
-    width: 60,
-    content: '<p style="font-size: 10px;">User</p>',
-  }));
+  let currentX = x + 40;
 
-  // User Need
-  items.push(await miro.board.createShape({
-    shape: 'circle',
-    x: x - 30,
-    y: y + spacing,
-    width: 30,
-    height: 30,
-    style: { fillColor: '#4262FF', borderWidth: 0 },
-  }));
-  items.push(await miro.board.createText({
-    x: x + 20,
-    y: y + spacing,
-    width: 80,
-    content: '<p style="font-size: 10px;">User Need</p>',
-  }));
+  // User - reuse shape function
+  items.push(...await createUser(currentX, y));
+  currentX += hSpacing;
 
-  // Internal
-  items.push(await miro.board.createShape({
-    shape: 'circle',
-    x: x - 30,
-    y: y + spacing * 2,
-    width: 30,
-    height: 30,
-    style: { fillColor: '#FFFFFF', borderColor: '#1A1A1A', borderWidth: 1 },
-  }));
-  items.push(await miro.board.createText({
-    x: x + 20,
-    y: y + spacing * 2,
-    width: 60,
-    content: '<p style="font-size: 10px;">Internal</p>',
-  }));
+  // User Need - reuse shape function
+  items.push(...await createUserNeed(currentX, y));
+  currentX += hSpacing;
 
-  // External
-  items.push(await miro.board.createShape({
-    shape: 'circle',
-    x: x - 30,
-    y: y + spacing * 3,
-    width: 30,
-    height: 30,
-    style: { fillColor: '#333333', borderWidth: 0 },
-  }));
-  items.push(await miro.board.createText({
-    x: x + 20,
-    y: y + spacing * 3,
-    width: 60,
-    content: '<p style="font-size: 10px;">External</p>',
-  }));
+  // Internal - reuse shape function
+  items.push(...await createInternalCapability(currentX, y));
+  currentX += hSpacing;
 
-  // Depends on line
-  items.push(await miro.board.createConnector({
-    start: { position: { x: x - 45, y: y + spacing * 4 } },
-    end: { position: { x: x - 15, y: y + spacing * 4 } },
-    shape: 'straight',
-    style: {
-      strokeColor: '#666666',
-      strokeWidth: 2,
-      startStrokeCap: 'none',
-      endStrokeCap: 'none',
-    },
-  }));
-  items.push(await miro.board.createText({
-    x: x + 30,
-    y: y + spacing * 4,
-    width: 80,
-    content: '<p style="font-size: 10px;">Depends on</p>',
-  }));
+  // External - reuse shape function
+  items.push(...await createExternalCapability(currentX, y));
+  currentX += hSpacing;
+
+  // Connector - reuse shape function
+  const connector = await createConnectorShape(currentX, y);  
+  items.push(...await createLabeledShape(connector[0].id, currentX, y, 'Depends on'));
 
   return items;
 }

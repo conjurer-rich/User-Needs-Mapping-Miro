@@ -19,7 +19,7 @@ const TEAM_BOUNDARY_HEIGHT = 300;
 const TEXT_OFFSET = 35; // Distance from shape center to text center
 const TEXT_WIDTH = 120;
 const USER_TEXT_WIDTH = 45;
-const DEFAULT_FONT_SIZE = 14;
+const DEFAULT_FONT_SIZE = 18;
 
 // Colors matching the User Needs Mapping visual style
 const COLORS = {
@@ -33,14 +33,19 @@ const COLORS = {
   connector: '#666666',          // Gray line
 };
 
+// Export colors so template can access them
+export { COLORS };
+
+export type CreatedItem = Awaited<ReturnType<typeof miro.board.createShape | typeof miro.board.createText | typeof miro.board.createConnector>>;
+
 // Helper to create a text label and group it with a shape
-async function createLabeledShape(
+export async function createLabeledShape(
   shapeId: string,
   x: number,
   y: number,
   defaultLabel: string,
   textOffsetY: number = TEXT_OFFSET
-): Promise<void> {
+): Promise<CreatedItem[]> {
   const text = await miro.board.createText({
     x,
     y: y + textOffsetY,
@@ -55,10 +60,12 @@ async function createLabeledShape(
   const shape = await miro.board.getById(shapeId) as Awaited<ReturnType<typeof miro.board.createShape>>;
   if (shape && text) {
     await miro.board.group({ items: [shape, text] });
+    return [shape, text];
   }
+  return [];
 }
 
-export async function createUser(x: number, y: number): Promise<void> {
+export async function createUser(x: number, y: number): Promise<CreatedItem[]> {
   // Create head (small circle)
   const head = await miro.board.createShape({
     shape: 'circle',
@@ -102,10 +109,12 @@ export async function createUser(x: number, y: number): Promise<void> {
   // Group all parts together
   if (head && body && text) {
     await miro.board.group({ items: [head, body, text] });
+    return [head, body, text];
   }
+  return [];
 }
 
-export async function createUserNeed(x: number, y: number): Promise<void> {
+export async function createUserNeed(x: number, y: number): Promise<CreatedItem[]> {
   const shape = await miro.board.createShape({
     shape: 'circle',
     x,
@@ -119,10 +128,11 @@ export async function createUserNeed(x: number, y: number): Promise<void> {
     },
   });
 
-  await createLabeledShape(shape.id, x, y, 'User Need');
+  const items = await createLabeledShape(shape.id, x, y, 'User Need');
+  return [shape, ...items.filter(i => i.id !== shape.id)];
 }
 
-export async function createInternalCapability(x: number, y: number): Promise<void> {
+export async function createInternalCapability(x: number, y: number): Promise<CreatedItem[]> {
   const shape = await miro.board.createShape({
     shape: 'circle',
     x,
@@ -136,10 +146,11 @@ export async function createInternalCapability(x: number, y: number): Promise<vo
     },
   });
 
-  await createLabeledShape(shape.id, x, y, 'Internal');
+  const items = await createLabeledShape(shape.id, x, y, 'Internal');
+  return [shape, ...items.filter(i => i.id !== shape.id)];
 }
 
-export async function createExternalCapability(x: number, y: number): Promise<void> {
+export async function createExternalCapability(x: number, y: number): Promise<CreatedItem[]> {
   const shape = await miro.board.createShape({
     shape: 'circle',
     x,
@@ -153,10 +164,11 @@ export async function createExternalCapability(x: number, y: number): Promise<vo
     },
   });
 
-  await createLabeledShape(shape.id, x, y, 'External');
+  const items = await createLabeledShape(shape.id, x, y, 'External');
+  return [shape, ...items.filter(i => i.id !== shape.id)];
 }
 
-export async function createSystem(x: number, y: number): Promise<void> {
+export async function createSystem(x: number, y: number): Promise<CreatedItem[]> {
   const shape = await miro.board.createShape({
     shape: 'rectangle',
     x,
@@ -171,10 +183,11 @@ export async function createSystem(x: number, y: number): Promise<void> {
     },
   });
 
-  await createLabeledShape(shape.id, x, y, 'System', RECTANGLE_HEIGHT / 2 + 20);
+  const items = await createLabeledShape(shape.id, x, y, 'System', RECTANGLE_HEIGHT / 2 + 20);
+  return [shape, ...items.filter(i => i.id !== shape.id)];
 }
 
-export async function createProcess(x: number, y: number): Promise<void> {
+export async function createProcess(x: number, y: number): Promise<CreatedItem[]> {
   const shape = await miro.board.createShape({
     shape: 'rectangle',
     x,
@@ -189,12 +202,13 @@ export async function createProcess(x: number, y: number): Promise<void> {
     },
   });
 
-  await createLabeledShape(shape.id, x, y, 'System', RECTANGLE_HEIGHT / 2 + 20);
+  const items = await createLabeledShape(shape.id, x, y, 'Process', RECTANGLE_HEIGHT / 2 + 20);
+  return [shape, ...items.filter(i => i.id !== shape.id)];
 }
 
-export async function createConnector(x: number, y: number): Promise<void> {
+export async function createConnector(x: number, y: number): Promise<CreatedItem[]> {
   // Connectors don't need labels - they just connect shapes
-  await miro.board.createConnector({
+  const connector = await miro.board.createConnector({
     start: {
       position: { x: x - 50, y },
     },
@@ -209,9 +223,10 @@ export async function createConnector(x: number, y: number): Promise<void> {
       endStrokeCap: 'none',
     },
   });
+  return [connector];
 }
 
-export async function createTeamBoundary(x: number, y: number): Promise<void> {
+export async function createTeamBoundary(x: number, y: number): Promise<CreatedItem[]> {
   const shape = await miro.board.createShape({
     shape: 'round_rectangle',
     x,
@@ -240,11 +255,13 @@ export async function createTeamBoundary(x: number, y: number): Promise<void> {
   const shapeItem = await miro.board.getById(shape.id) as Awaited<ReturnType<typeof miro.board.createShape>>;
   if (shapeItem && text) {
     await miro.board.group({ items: [shapeItem, text] });
+    return [shapeItem, text];
   }
+  return [shape];
 }
 
 // Factory function to create shapes by type
-export async function createShape(type: ShapeType, x: number, y: number): Promise<void> {
+export async function createShape(type: ShapeType, x: number, y: number): Promise<CreatedItem[]> {
   switch (type) {
     case 'user':
       return createUser(x, y);
@@ -264,5 +281,6 @@ export async function createShape(type: ShapeType, x: number, y: number): Promis
       return createTeamBoundary(x, y);
     default:
       console.warn(`Unknown shape type: ${type}`);
+      return [];
   }
 }
