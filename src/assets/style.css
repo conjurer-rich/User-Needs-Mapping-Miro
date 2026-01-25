@@ -1,4 +1,5 @@
 @import 'mirotone/dist/styles.css';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 *,
 *:before,
@@ -9,7 +10,7 @@
 body {
   display: flex;
   margin: 0;
-  font-family: var(--font-family);
+  font-family: 'Poppins', sans-serif;
 }
 
 #root {
@@ -57,7 +58,7 @@ img {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--secondary-text-color);
-  margin: 0 0 var(--space-small) 0;
+  margin: 0 0 var(--space-xsmall) 0;
   padding-bottom: var(--space-xsmall);
   border-bottom: 1px solid var(--border-color);
 }
@@ -65,7 +66,7 @@ img {
 /* Shape Grid */
 .shape-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: var(--space-small);
 }
 
@@ -74,7 +75,7 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--space-small);
+  padding: var(--space-xsmall);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   cursor: grab;

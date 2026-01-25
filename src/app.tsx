@@ -68,19 +68,9 @@ const App: React.FC = () => {
 
   return (
     <div className="panel-container">
-      <h2 className="panel-title">User Needs Mapping</h2>
       <p className="panel-description">
         Drag shapes onto the board to build your map
       </p>
-
-      <button
-        className="button button-primary template-button"
-        onClick={handleCreateTemplate}
-        disabled={isCreatingTemplate}
-      >
-        {isCreatingTemplate ? 'Creating...' : 'Create Starter Template'}
-      </button>
-
       <div className="shape-section">
         <h3 className="section-title">Users & Needs</h3>
         <div className="shape-grid">
@@ -94,6 +84,11 @@ const App: React.FC = () => {
           </ShapeItem>
           <ShapeItem type="userNeed" label="User Need">
             <div className="preview-circle preview-user-need" />
+          </ShapeItem>
+          <ShapeItem type="connector" label="Depends On">
+            <div className="preview-connector">
+              <div className="connector-line" />
+            </div>
           </ShapeItem>
         </div>
       </div>
@@ -117,18 +112,7 @@ const App: React.FC = () => {
       </div>
 
       <div className="shape-section">
-        <h3 className="section-title">Connections</h3>
-        <div className="shape-grid">
-          <ShapeItem type="connector" label="Depends On">
-            <div className="preview-connector">
-              <div className="connector-line" />
-            </div>
-          </ShapeItem>
-        </div>
-      </div>
-
-      <div className="shape-section">
-        <h3 className="section-title">Boundaries</h3>
+        <h3 className="section-title">Observations</h3>
         <div className="shape-grid">
           <ShapeItem type="teamBoundary" label="Team Boundary">
             <div className="preview-boundary" />
@@ -136,7 +120,14 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      <div className="panel-footer">
+      <div className="panel-footer">  
+        <button
+          className="button button-primary template-button"
+          onClick={handleCreateTemplate}
+          disabled={isCreatingTemplate}
+        >
+          {isCreatingTemplate ? 'Creating...' : 'Create Starter Template'}
+        </button>
         <a
           href="https://userneedsmapping.com"
           target="_blank"
