@@ -107,8 +107,11 @@ const App: React.FC = () => {
           <ShapeItem type="externalCapability" label="External">
             <div className="preview-circle preview-external" />
           </ShapeItem>
-          <ShapeItem type="systemProcess" label="System">
-            <div className="preview-rectangle" />
+          <ShapeItem type="system" label="System">
+            <div className="preview-system" />
+          </ShapeItem>
+          <ShapeItem type="process" label="Process">
+            <div className="preview-process" />
           </ShapeItem>
         </div>
       </div>

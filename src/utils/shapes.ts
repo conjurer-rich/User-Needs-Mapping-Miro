@@ -5,7 +5,8 @@ export type ShapeType =
   | 'userNeed'
   | 'internalCapability'
   | 'externalCapability'
-  | 'systemProcess'
+  | 'system'
+  | 'process'
   | 'connector'
   | 'teamBoundary';
 
@@ -25,7 +26,8 @@ const COLORS = {
   userNeed: '#414BB2',           // Blue filled
   internalCapability: '#FFFFFF', // White fill
   externalCapability: '#808080', // Dark gray/black
-  systemProcess: '#FFFFFF',      // White fill
+  system: 'transparent',      // Transparent
+  process: 'transparent',      // Transparent
   teamBoundary: '#FFF3CD',       // Light yellow
   border: '#1A1A1A',             // Dark border
   connector: '#666666',          // Gray line
@@ -154,7 +156,7 @@ export async function createExternalCapability(x: number, y: number): Promise<vo
   await createLabeledShape(shape.id, x, y, 'External');
 }
 
-export async function createSystemProcess(x: number, y: number): Promise<void> {
+export async function createSystem(x: number, y: number): Promise<void> {
   const shape = await miro.board.createShape({
     shape: 'rectangle',
     x,
@@ -162,7 +164,26 @@ export async function createSystemProcess(x: number, y: number): Promise<void> {
     width: RECTANGLE_WIDTH,
     height: RECTANGLE_HEIGHT,
     style: {
-      fillColor: COLORS.systemProcess,
+      fillColor: COLORS.system,
+      borderStyle: 'dotted',
+      borderColor: COLORS.border,
+      borderWidth: 2,
+    },
+  });
+
+  await createLabeledShape(shape.id, x, y, 'System', RECTANGLE_HEIGHT / 2 + 20);
+}
+
+export async function createProcess(x: number, y: number): Promise<void> {
+  const shape = await miro.board.createShape({
+    shape: 'rectangle',
+    x,
+    y,
+    width: RECTANGLE_WIDTH,
+    height: RECTANGLE_HEIGHT,
+    style: {
+      fillColor: COLORS.process,
+      borderStyle: 'dashed',
       borderColor: COLORS.border,
       borderWidth: 2,
     },
@@ -180,9 +201,12 @@ export async function createConnector(x: number, y: number): Promise<void> {
     end: {
       position: { x: x + 50, y },
     },
+    shape: 'straight',
     style: {
       strokeColor: COLORS.connector,
       strokeWidth: 2,
+      startStrokeCap: 'none',
+      endStrokeCap: 'none',
     },
   });
 }
@@ -230,8 +254,10 @@ export async function createShape(type: ShapeType, x: number, y: number): Promis
       return createInternalCapability(x, y);
     case 'externalCapability':
       return createExternalCapability(x, y);
-    case 'systemProcess':
-      return createSystemProcess(x, y);
+    case 'system':
+      return createSystem(x, y);
+    case 'process':
+      return createProcess(x, y);
     case 'connector':
       return createConnector(x, y);
     case 'teamBoundary':

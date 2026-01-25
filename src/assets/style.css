@@ -117,7 +117,7 @@ img {
 }
 
 .preview-user-need {
-  background-color: #4262FF;
+  background-color: #414BB2;
 }
 
 .preview-internal {
@@ -126,7 +126,7 @@ img {
 }
 
 .preview-external {
-  background-color: #333333;
+  background-color: #808080;
 }
 
 .preview-user {
@@ -140,11 +140,19 @@ img {
   pointer-events: none;
 }
 
-.preview-rectangle {
+.preview-system {
   width: 36px;
   height: 24px;
-  background-color: #FFFFFF;
-  border: 2px solid #1A1A1A;
+  background-color: transparent;
+  border: 2px dotted #1A1A1A;
+  border-radius: 2px;
+}
+
+.preview-process {
+  width: 36px;
+  height: 24px;
+  background-color: transparent;
+  border: 2px dashed #1A1A1A;
   border-radius: 2px;
 }
 
