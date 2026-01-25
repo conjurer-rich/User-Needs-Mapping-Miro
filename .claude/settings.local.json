@@ -5,7 +5,8 @@
       "WebFetch(domain:developers.miro.com)",
       "Bash(npx create-miro-app@latest:*)",
       "Bash(npm run build:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(npm start)"
     ]
   }
 }

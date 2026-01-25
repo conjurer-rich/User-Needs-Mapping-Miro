@@ -126,7 +126,7 @@ const App: React.FC = () => {
           onClick={handleCreateTemplate}
           disabled={isCreatingTemplate}
         >
-          {isCreatingTemplate ? 'Creating...' : 'Create Starter Template'}
+          {isCreatingTemplate ? 'Creating...' : 'Create Frame'}
         </button>
         <a
           href="https://userneedsmapping.com"
