@@ -9,6 +9,8 @@ Based on the User Needs Mapping technique by Richard Allen [@conjurer-rich](http
 > See [userneedsmapping.com](https://userneedsmapping.com) for more details about User Needs Mapping.
 > Copyright © 2025-2026 [Conjurer Solutions Ltd](https://conjurersolutions.co.uk) - Licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) ![CC BY-SA 4.0](https://licensebuttons.net/l/by-sa/3.0/88x31.png)
 
+![Screenshot](readme-img/unm_miro_plugin.png)
+
 ## What is User Needs Mapping?
 
 User Needs Mapping is a visual technique for mapping user needs to organizational capabilities. It helps teams understand:
