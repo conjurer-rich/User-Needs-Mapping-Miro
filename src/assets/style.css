@@ -45,6 +45,7 @@ img {
 .template-button {
   width: 100%;
   margin-bottom: var(--space-large);
+  text-align: center;
 }
 
 /* Shape Sections */
@@ -106,7 +107,6 @@ img {
   font-size: 10px;
   color: var(--secondary-text-color);
   text-align: center;
-  white-space: nowrap;
   pointer-events: none;
 }
 
@@ -171,12 +171,59 @@ img {
   background-color: #666666;
 }
 
-.preview-boundary {
+/* Team Overlay Previews */
+.preview-stream-aligned {
   width: 36px;
   height: 28px;
   background-color: #FFF3CD;
-  border: 2px dashed #E6C200;
+  border: 2px solid #E6C200;
   border-radius: 6px;
+}
+
+.preview-platform-team {
+  width: 36px;
+  height: 28px;
+  background-color: #E6F3FF;
+  border: 2px solid #6699CC;
+}
+
+.preview-complicated-subsystem {
+  width: 32px;
+  height: 28px;
+  background-color: #FFCCAA;
+  border: 2px solid #FF9955;
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+}
+
+.preview-undefined-team {
+  width: 36px;
+  height: 24px;
+  background-color: #EBEBEF;
+  border: 2px dashed #9B99AF;
+  border-radius: 2px;
+}
+
+.preview-undefined-grouping {
+  width: 36px;
+  height: 24px;
+  background-color: #EBEBEF;
+  border: 2px dotted #9B99AF;
+}
+
+.preview-value-stream {
+  width: 36px;
+  height: 24px;
+  background-color: #FFF3CD;
+  border: 2px dotted #E6C200;
+  border-radius: 2px;
+}
+
+.preview-platform-grouping {
+  width: 36px;
+  height: 24px;
+  background-color: #E6F3FF;
+  border: 2px dotted #6699CC;
+  border-radius: 2px;
 }
 
 /* Panel Footer */

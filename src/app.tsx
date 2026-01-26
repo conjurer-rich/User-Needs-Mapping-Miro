@@ -68,9 +68,6 @@ const App: React.FC = () => {
 
   return (
     <div className="panel-container">
-      <p className="panel-description">
-        Drag shapes onto the board to build your map
-      </p>
       <div className="shape-section">
         <h3 className="section-title">Users & Needs</h3>
         <div className="shape-grid">
@@ -112,10 +109,34 @@ const App: React.FC = () => {
       </div>
 
       <div className="shape-section">
-        <h3 className="section-title">Observations</h3>
+        <h3 className="section-title">Team Overlays</h3>
         <div className="shape-grid">
-          <ShapeItem type="teamBoundary" label="Team Boundary">
-            <div className="preview-boundary" />
+          <ShapeItem type="streamAlignedTeam" label="Stream-aligned">
+            <div className="preview-stream-aligned" />
+          </ShapeItem>
+          <ShapeItem type="platformTeam" label="Platform">
+            <div className="preview-platform-team" />
+          </ShapeItem>
+          <ShapeItem type="complicatedSubsystemTeam" label="Complicated Subsystem">
+            <div className="preview-complicated-subsystem" />
+          </ShapeItem>
+          <ShapeItem type="undefinedTeam" label="Undefined">
+            <div className="preview-undefined-team" />
+          </ShapeItem>
+        </div>
+      </div>
+
+      <div className="shape-section">
+        <h3 className="section-title">Groupings</h3>
+        <div className="shape-grid">
+          <ShapeItem type="valueStreamGrouping" label="Value Stream">
+            <div className="preview-value-stream" />
+          </ShapeItem>
+          <ShapeItem type="platformGrouping" label="Platform">
+            <div className="preview-platform-grouping" />
+          </ShapeItem>
+          <ShapeItem type="undefinedGrouping" label="Undefined">
+            <div className="preview-undefined-grouping" />
           </ShapeItem>
         </div>
       </div>
