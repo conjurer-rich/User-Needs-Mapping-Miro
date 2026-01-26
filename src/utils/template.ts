@@ -106,7 +106,7 @@ export async function createStarterTemplate(): Promise<void> {
       strokeColor: COLORS.axis,
       strokeWidth: 2,
       startStrokeCap: 'arrow',
-      endStrokeCap: 'arrow',
+      endStrokeCap: 'none',
     },
   });
   itemsToAdd.push(axisLine);
@@ -127,7 +127,7 @@ export async function createStarterTemplate(): Promise<void> {
   }
 
   // Add a "Key" legend horizontally on the right, inline with the Users row
-  const legendWidth = 5 * 120 + 80; // 5 items * spacing + padding
+  const legendWidth = 5 * 80 + 80; // 5 items * spacing + padding
   const legendStartX = startX + TEMPLATE_WIDTH / 2 - legendWidth;
   const legendItems = await createKeyLegend(legendStartX, startY);
   itemsToAdd.push(...legendItems);
@@ -143,14 +143,17 @@ export async function createStarterTemplate(): Promise<void> {
 
 async function createKeyLegend(x: number, y: number): Promise<CreatedItem[]> {
   const items: CreatedItem[] = [];
-  const hSpacing = 120; // Horizontal spacing between items
+  const hSpacing = 80; // Horizontal spacing between items
 
   // Key title
   items.push(await miro.board.createText({
     x: x - 40,
     y,
     width: 50,
-    content: '<p style="font-size: 14px; font-weight: bold;">Key</p>',
+    content: 'Key',
+    style: {
+      fontSize: 14
+    }
   }));
 
   let currentX = x + 40;

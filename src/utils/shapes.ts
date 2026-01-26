@@ -115,10 +115,23 @@ export async function createUser(x: number, y: number): Promise<CreatedItem[]> {
     },
   });
 
+  const overlay = await miro.board.createShape({
+    shape: 'rectangle',
+    x,
+    y: y + TEXT_OFFSET - 4,
+    width: USER_TEXT_WIDTH,
+    height: 25,
+    style: {
+      fillColor: '#FFFFFF',
+      borderColor: COLORS.border,
+      borderWidth: 0,
+    },
+  });
+
   // Create label
   const text = await miro.board.createText({
     x,
-    y: y + TEXT_OFFSET - 4,
+    y: y + TEXT_OFFSET,
     width: USER_TEXT_WIDTH,
     height: 40,
     content: `User`,
@@ -130,8 +143,8 @@ export async function createUser(x: number, y: number): Promise<CreatedItem[]> {
   });
 
   // Group all parts together
-  if (head && body && text) {
-    await miro.board.group({ items: [head, body, text] });
+  if (head && body && overlay && text) {
+    await miro.board.group({ items: [head, body, overlay, text] });
     return [head, body, text];
   }
   return [];
@@ -198,16 +211,18 @@ export async function createSystem(x: number, y: number): Promise<CreatedItem[]>
     y,
     width: RECTANGLE_WIDTH,
     height: RECTANGLE_HEIGHT,
+    content: 'System',
     style: {
       fillColor: COLORS.system,
       borderStyle: 'dotted',
       borderColor: COLORS.border,
       borderWidth: 2,
+      textAlign: 'left',
+      textAlignVertical: 'top'
     },
   });
 
-  const items = await createLabeledShape(shape.id, x, y, 'System', RECTANGLE_HEIGHT / 2 + 20);
-  return [shape, ...items.filter(i => i.id !== shape.id)];
+  return [shape];
 }
 
 export async function createProcess(x: number, y: number): Promise<CreatedItem[]> {
@@ -217,16 +232,18 @@ export async function createProcess(x: number, y: number): Promise<CreatedItem[]
     y,
     width: RECTANGLE_WIDTH,
     height: RECTANGLE_HEIGHT,
+    content: 'Process',
     style: {
       fillColor: COLORS.process,
       borderStyle: 'dashed',
       borderColor: COLORS.border,
       borderWidth: 2,
+      textAlign: 'left',
+      textAlignVertical: 'top'
     },
   });
 
-  const items = await createLabeledShape(shape.id, x, y, 'Process', RECTANGLE_HEIGHT / 2 + 20);
-  return [shape, ...items.filter(i => i.id !== shape.id)];
+  return [shape];
 }
 
 export async function createConnector(x: number, y: number): Promise<CreatedItem[]> {
