@@ -1,12 +1,12 @@
-## Temp Miro App
+# User Needs Mapping Miro App
 
-**&nbsp;ℹ&nbsp;Note**:
+**Note**:
 
 - We recommend a Chromium-based web browser for local development with HTTP. \
   Safari enforces HTTPS; therefore, it doesn't allow localhost through HTTP.
 - For more information, visit our [developer documentation](https://developers.miro.com).
 
-### How to start locally
+## How to start locally
 
 - Run `npm i` to install dependencies.
 - Run `npm start` to start developing. \
@@ -19,13 +19,13 @@
 - Open a board; you should see your app in the app toolbar or in the **Apps**
   panel.
 
-### How to build the app
+## How to build the app
 
 - Run `npm run build`. \
   This generates a static output inside [`dist/`](./dist), which you can host on a static hosting
   service.
 
-### Folder structure
+## Folder structure
 
 <!-- The following tree structure is just an example -->
 
