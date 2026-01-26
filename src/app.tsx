@@ -87,6 +87,9 @@ const App: React.FC = () => {
               <div className="connector-line" />
             </div>
           </ShapeItem>
+          <ShapeItem type="process" label="Process/Journey">
+            <div className="preview-process" />
+          </ShapeItem>
         </div>
       </div>
 
@@ -101,9 +104,6 @@ const App: React.FC = () => {
           </ShapeItem>
           <ShapeItem type="system" label="System">
             <div className="preview-system" />
-          </ShapeItem>
-          <ShapeItem type="process" label="Process">
-            <div className="preview-process" />
           </ShapeItem>
         </div>
       </div>
