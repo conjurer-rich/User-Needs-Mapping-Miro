@@ -1,52 +1,111 @@
-# User Needs Mapping Miro App
+# User Needs Mapping plugin for Miro
 
-**Note**:
+[![Netlify Status](https://api.netlify.com/api/v1/badges/a50202d0-f842-4874-a76c-49e3f0d4c860/deploy-status)](https://app.netlify.com/projects/miro-user-needs-mapping/deploys)
 
-- We recommend a Chromium-based web browser for local development with HTTP. \
-  Safari enforces HTTPS; therefore, it doesn't allow localhost through HTTP.
-- For more information, visit our [developer documentation](https://developers.miro.com).
+This plugin provides ready-to-use shapes to build User Needs Maps in [Miro](https://miro.com).
 
-## How to start locally
+Based on the User Needs Mapping technique by Richard Allen [@conjurer-rich](https://github.com/conjurer-rich).
 
-- Run `npm i` to install dependencies.
-- Run `npm start` to start developing. \
-  Your URL should be similar to this example:
- ```
- http://localhost:3000
- ```
-- Paste the URL under **App URL** in your
-  [app settings](https://developers.miro.com/docs/build-your-first-hello-world-app#step-3-configure-your-app-in-miro).
-- Open a board; you should see your app in the app toolbar or in the **Apps**
-  panel.
+> See [userneedsmapping.com](https://userneedsmapping.com) for more details about User Needs Mapping.
+> Copyright © 2025-2026 [Conjurer Solutions Ltd](https://conjurersolutions.co.uk) - Licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) ![CC BY-SA 4.0](https://licensebuttons.net/l/by-sa/3.0/88x31.png)
 
-## How to build the app
+## What is User Needs Mapping?
 
-- Run `npm run build`. \
-  This generates a static output inside [`dist/`](./dist), which you can host on a static hosting
-  service.
+User Needs Mapping is a visual technique for mapping user needs to organizational capabilities. It helps teams understand:
 
-## Folder structure
+- Who the users are
+- What needs those users have
+- What internal and external capabilities exist to meet those needs
+- How capabilities depend on each other
+- Which teams own which capabilities
 
-<!-- The following tree structure is just an example -->
+## How it works
 
+### Available Shapes
+
+### Users & Needs
+
+- **User** - Person silhouette representing a user type
+- **User Need** - Blue filled circle representing a user need
+- **Depends On** - Connector line showing dependencies
+
+### Capabilities
+
+- **Internal** - White circle with border for internal capabilities
+- **External** - Gray filled circle for external capabilities
+- **System** - Dotted border rectangle for systems
+- **Process** - Dashed border rectangle for processes
+
+### Team Overlays
+
+- **Stream-aligned** - Yellow rounded rectangle for stream-aligned teams
+- **Platform** - Blue rectangle for platform teams
+- **Complicated Subsystem** - Orange octagon for complicated subsystem teams
+- **Undefined** - Gray rounded rectangle for undefined team types
+
+### Groupings
+
+- **Value Stream** - Yellow dotted rectangle for value stream groupings
+- **Platform** - Blue dotted rectangle for platform groupings
+- **Undefined** - Gray dotted rectangle for undefined groupings
+
+### Using the Plugin
+
+1. Open the User Needs Mapping plugin from your Miro board
+2. Drag and drop shapes onto the canvas to build your map
+3. Use "Create Frame" to generate a starter template with labels and legend
+4. Edit shapes and labels as needed (they're standard Miro shapes)
+
+## Run the app locally
+
+### Prerequisites
+
+- Node.js 16+
+- npm
+
+### Installation
+
+```bash
+npm install
+npm start
 ```
-.
-├── src
-│  ├── assets
-│  │  └── style.css
-│  ├── app.tsx      // The code for the app lives here
-│  └── index.ts    // The code for the app entry point lives here
-├── app.html       // The app itself. It's loaded on the board inside the 'appContainer'
-└── index.html     // The app entry point. This is what you specify in the 'App URL' box in the Miro app settings
+
+Your local server will start at `http://localhost:3000`
+
+### Configure in Miro
+
+1. Follow [these steps](https://developers.miro.com/docs/build-your-first-hello-world-app#step-2-create-a-developer-team-in-miro) to create a Miro Developer Team
+2. Create a new app in your Developer Team settings
+3. Set the **App URL** to `http://localhost:3000`
+4. Install the app on a board to test
+
+## Build for production
+
+```bash
+npm run build
 ```
 
-### About the app
+This generates static output in the `dist/` folder, which can be hosted on any static hosting service.
 
-This sample app provides you with boilerplate setup and configuration that you can further customize to build your own app.
+## Project Structure
 
-<!-- describe shortly the purpose of the sample app -->
+```text
+src/
+├── index.ts          # App entry point - opens panel on icon click
+├── app.tsx           # React panel UI with draggable shapes
+├── utils/
+│   ├── shapes.ts     # Shape factory functions
+│   └── template.ts   # Starter template generator
+└── assets/
+    └── style.css     # Panel styling
+```
 
-Built using [`create-miro-app`](https://www.npmjs.com/package/create-miro-app).
+## Contributing
 
-This app uses [Vite](https://vitejs.dev/). \
-If you want to modify the `vite.config.js` configuration, see the [Vite documentation](https://vitejs.dev/guide/).
+Contributions are welcome! Please feel free to submit issues and pull requests.
+
+## License
+
+This work is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+
+Built using [`create-miro-app`](https://www.npmjs.com/package/create-miro-app) and [Vite](https://vitejs.dev/).
