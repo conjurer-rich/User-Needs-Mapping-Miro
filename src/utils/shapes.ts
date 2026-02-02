@@ -280,7 +280,7 @@ export async function createStreamAlignedTeam(x: number, y: number): Promise<Cre
       borderColor: COLORS.streamAlignedBorder,
       borderWidth: 2,
       textAlign: 'center',
-      textAlignVertical: 'top', 
+      textAlignVertical: 'top',
       fillOpacity: 0.5,
     },
   });
@@ -302,7 +302,7 @@ export async function createComplicatedSubsystemTeam(x: number, y: number): Prom
       borderColor: COLORS.complicatedSubsystemBorder,
       borderWidth: 2,
       textAlign: 'center',
-      textAlignVertical: 'top', 
+      textAlignVertical: 'top',
       fillOpacity: 0.5,
     },
   });
@@ -346,6 +346,7 @@ export async function createPlatformTeam(x: number, y: number): Promise<CreatedI
       fillColor: COLORS.platformTeam,
       borderColor: COLORS.platformBorder,
       borderWidth: 2,
+      borderStyle: 'dotted',
       textAlign: 'center',
       textAlignVertical: 'top',
       fillOpacity: 0.5,
