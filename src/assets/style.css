@@ -184,7 +184,7 @@ img {
   width: 36px;
   height: 28px;
   background-color: #E6F3FF;
-  border: 2px solid #6699CC;
+  border: 2px dotted #6699CC;
 }
 
 .preview-complicated-subsystem {
