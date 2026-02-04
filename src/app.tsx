@@ -12,7 +12,7 @@ let hasShownLinkingHint = false;
 async function showLinkingShortcutHint() {
   try {
     await miro.board.notifications.showInfo(
-      'Click the board (not the frame), then press "L" on your keyboard to start linking components.'
+      'Click the board (not frame), then press "L" on your keyboard to start linking components.'
     );
   } catch (error) {
     // If notifications fail, log the error but do not interrupt the flow.
