@@ -7,7 +7,9 @@
       "Bash(npm run build:*)",
       "Bash(npx tsc:*)",
       "Bash(npm start)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(npm ls:*)",
+      "Bash(npm run test:run:*)"
     ]
   }
 }

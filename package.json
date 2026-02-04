@@ -6,7 +6,9 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "test": "vitest",
+    "test:run": "vitest run"
   },
   "dependencies": {
     "mirotone": "5",
@@ -14,6 +16,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "vitest": "^4.0.18",
     "vite": "3.0.3",
     "@mirohq/websdk-types": "latest",
     "@types/react": "^18.0.24",
