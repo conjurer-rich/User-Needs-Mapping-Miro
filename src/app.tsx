@@ -9,13 +9,13 @@ import './assets/style.css';
 let createdShapesCount = 0;
 let hasShownLinkingHint = false;
 
-async function showLinkingShortcutHint() {
+export const LINKING_HINT_MESSAGE =
+  'Click the board, then press "L" to start linking components.';
+
+export async function showLinkingShortcutHint() {
   try {
-    await miro.board.notifications.showInfo(
-      'Click the board, then press "L" on your keyboard to start linking components.'
-    );
+    await miro.board.notifications.showInfo(LINKING_HINT_MESSAGE);
   } catch (error) {
-    // If notifications fail, log the error but do not interrupt the flow.
     console.error('Failed to show linking shortcut hint:', error);
   }
 }
@@ -52,8 +52,10 @@ async function initDropHandler() {
   });
 }
 
-// Initialize drop handler
-initDropHandler();
+// Initialize drop handler (only in browser context)
+if (typeof miro !== 'undefined') {
+  initDropHandler();
+}
 
 interface ShapeItemProps {
   type: ShapeType;
