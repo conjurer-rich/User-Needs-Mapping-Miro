@@ -132,15 +132,16 @@ export function createMiroMock() {
 
       viewport: {
         get: vi.fn(async () => ({ x: 0, y: 0, width: 1920, height: 1080 })),
-        zoomTo: vi.fn(async () => {}),
+        zoomTo: vi.fn(async (_item: unknown) => {}),
       },
 
       notifications: {
-        showInfo: vi.fn(async () => {}),
+        showInfo: vi.fn(async (_message: string) => {}),
       },
 
       ui: {
         on: vi.fn(),
+        openPanel: vi.fn(async (_options: { url: string }) => {}),
         closePanel: vi.fn(async () => {}),
       },
     },

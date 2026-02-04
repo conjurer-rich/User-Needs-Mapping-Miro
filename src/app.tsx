@@ -22,7 +22,7 @@ async function showLinkingShortcutHint() {
 
 // Register drop handler for drag-and-drop from panel to board
 async function initDropHandler() {
-  miro.board.ui.on('drop', async ({ x, y, target }) => {
+  miro.board.ui.on('drop', async ({ x, y, target }: { x: number; y: number; target: HTMLElement }) => {
     // Find the shape type from the dropped element or its parents
     let element = target as HTMLElement | null;
     let shapeType: ShapeType | undefined;

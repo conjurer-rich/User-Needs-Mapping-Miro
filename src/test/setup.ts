@@ -1,4 +1,4 @@
-import { vi, beforeEach } from 'vitest';
+import { beforeEach } from 'vitest';
 import { createMiroMock, resetMiroMock } from './miro-mock';
 
 declare global {

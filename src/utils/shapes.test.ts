@@ -288,7 +288,6 @@ describe('createUndefinedTeam', () => {
 
 describe('createLabeledShape', () => {
   it('creates text below the shape', async () => {
-    const shapes = getCreatedShapes();
     const shape = await miro.board.createShape({
       shape: 'circle',
       x: 100,
