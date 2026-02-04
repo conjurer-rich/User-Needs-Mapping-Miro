@@ -4,6 +4,22 @@ import { createStarterTemplate } from './utils/template';
 import { createShape, ShapeType } from './utils/shapes';
 import './assets/style.css';
 
+// Session-scoped tracking for shapes created from panel drops.
+// These values reset when the app (panel) is reloaded.
+let createdShapesCount = 0;
+let hasShownLinkingHint = false;
+
+async function showLinkingShortcutHint() {
+  try {
+    await miro.board.notifications.showInfo(
+      'Press "L" on your keyboard to start linking components.'
+    );
+  } catch (error) {
+    // If notifications fail, log the error but do not interrupt the flow.
+    console.error('Failed to show linking shortcut hint:', error);
+  }
+}
+
 // Register drop handler for drag-and-drop from panel to board
 async function initDropHandler() {
   miro.board.ui.on('drop', async ({ x, y, target }) => {
@@ -24,6 +40,12 @@ async function initDropHandler() {
 
     try {
       await createShape(shapeType, x, y);
+      createdShapesCount += 1;
+
+      if (!hasShownLinkingHint && createdShapesCount === 2) {
+        hasShownLinkingHint = true;
+        await showLinkingShortcutHint();
+      }
     } catch (error) {
       console.error(`Failed to create shape:`, error);
     }
