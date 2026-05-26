@@ -100,12 +100,21 @@ const ShapeItem: React.FC<ShapeItemProps> = ({ type, label, children }) => {
   //   - double click adds the shape at the viewport centre
   //   - Enter / Space adds (keyboard equivalent of double-click)
   //   - drag still uses Miro's SDK via the `miro-draggable` class
+  //
+  // Miro's drag SDK calls preventDefault() on mousedown to start its
+  // drag tracking, which suppresses the browser's default focus-on-
+  // mousedown behaviour. We force focus on click so a click that did
+  // not turn into a drag still gives the tile keyboard focus.
   const handleAdd = async () => {
     try {
       await addShapeAtViewportCenter(type);
     } catch (error) {
       console.error('Failed to add shape:', error);
     }
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.currentTarget.focus();
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
@@ -121,6 +130,7 @@ const ShapeItem: React.FC<ShapeItemProps> = ({ type, label, children }) => {
       data-shape-type={type}
       title={`Drag, double-click, or press Enter to add ${label}`}
       aria-label={`Add ${label} to the board`}
+      onClick={handleClick}
       onDoubleClick={handleAdd}
       onKeyDown={handleKeyDown}
     >
