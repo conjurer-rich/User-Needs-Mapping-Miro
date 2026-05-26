@@ -231,6 +231,8 @@ const App: React.FC = () => {
           </span>
           <a
             href={SUPPORT_MAILTO}
+            target="_blank"
+            rel="noopener noreferrer"
             className="footer-link"
             aria-label={`Email support at ${SUPPORT_EMAIL}`}
           >
