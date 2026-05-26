@@ -89,6 +89,16 @@ img {
   background: var(--hover-color);
 }
 
+.shape-item:focus {
+  outline: none;
+}
+
+.shape-item:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  border-color: var(--primary-color);
+}
+
 .shape-item:active {
   cursor: grabbing;
 }
@@ -234,12 +244,29 @@ img {
   text-align: center;
 }
 
-.learn-more-link {
+.footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-xsmall);
   font-size: 11px;
+}
+
+.footer-link {
   color: var(--primary-color);
   text-decoration: none;
 }
 
-.learn-more-link:hover {
+.footer-link:hover {
   text-decoration: underline;
+}
+
+.footer-link:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.footer-link-separator {
+  color: var(--secondary-text-color);
 }

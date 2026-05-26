@@ -4,6 +4,11 @@ import { createStarterTemplate } from './utils/template';
 import { createShape, ShapeType } from './utils/shapes';
 import './assets/style.css';
 
+export const SUPPORT_EMAIL = 'rich@userneedsmapping.com';
+export const SUPPORT_MAILTO = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(
+  'User Needs Mapping Miro app support'
+)}`;
+
 // Session-scoped tracking for shapes created from panel drops.
 // These values reset when the app (panel) is reloaded.
 let createdShapesCount = 0;
@@ -18,6 +23,34 @@ export async function showLinkingShortcutHint() {
   } catch (error) {
     console.error('Failed to show linking shortcut hint:', error);
   }
+}
+
+async function zoomToCreatedItems(items: Awaited<ReturnType<typeof createShape>>) {
+  if (!items.length) return;
+  try {
+    await miro.board.viewport.zoomTo(items);
+  } catch (error) {
+    console.error('Failed to zoom to created shape:', error);
+  }
+}
+
+export async function createShapeAndZoom(shapeType: ShapeType, x: number, y: number) {
+  const items = await createShape(shapeType, x, y);
+  await zoomToCreatedItems(items);
+
+  createdShapesCount += 1;
+  if (!hasShownLinkingHint && createdShapesCount === 2) {
+    hasShownLinkingHint = true;
+    await showLinkingShortcutHint();
+  }
+  return items;
+}
+
+export async function addShapeAtViewportCenter(shapeType: ShapeType) {
+  const viewport = await miro.board.viewport.get();
+  const centerX = viewport.x + viewport.width / 2;
+  const centerY = viewport.y + viewport.height / 2;
+  return createShapeAndZoom(shapeType, centerX, centerY);
 }
 
 // Register drop handler for drag-and-drop from panel to board
@@ -39,13 +72,7 @@ async function initDropHandler() {
     }
 
     try {
-      await createShape(shapeType, x, y);
-      createdShapesCount += 1;
-
-      if (!hasShownLinkingHint && createdShapesCount === 2) {
-        hasShownLinkingHint = true;
-        await showLinkingShortcutHint();
-      }
+      await createShapeAndZoom(shapeType, x, y);
     } catch (error) {
       console.error(`Failed to create shape:`, error);
     }
@@ -64,13 +91,29 @@ interface ShapeItemProps {
 }
 
 const ShapeItem: React.FC<ShapeItemProps> = ({ type, label, children }) => {
+  const handleKeyDown = async (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    try {
+      await addShapeAtViewportCenter(type);
+    } catch (error) {
+      console.error('Failed to add shape via keyboard:', error);
+    }
+  };
+
   return (
     <div
       className="miro-draggable shape-item"
       data-shape-type={type}
-      title={`Drag to add ${label}`}
+      title={`Drag, or press Enter, to add ${label}`}
+      role="button"
+      tabIndex={0}
+      aria-label={`Add ${label} to the board`}
+      onKeyDown={handleKeyDown}
     >
-      <div className="shape-preview">{children}</div>
+      <div className="shape-preview" aria-hidden="true">
+        {children}
+      </div>
       <span className="shape-label">{label}</span>
     </div>
   );
@@ -165,7 +208,7 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      <div className="panel-footer">  
+      <div className="panel-footer">
         <button
           className="button button-primary template-button"
           onClick={handleCreateTemplate}
@@ -173,14 +216,26 @@ const App: React.FC = () => {
         >
           {isCreatingTemplate ? 'Creating...' : 'Create Frame'}
         </button>
-        <a
-          href="https://userneedsmapping.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="learn-more-link"
-        >
-          Learn more about User Needs Mapping
-        </a>
+        <div className="footer-links">
+          <a
+            href="https://userneedsmapping.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-link"
+          >
+            Learn more
+          </a>
+          <span className="footer-link-separator" aria-hidden="true">
+            &middot;
+          </span>
+          <a
+            href={SUPPORT_MAILTO}
+            className="footer-link"
+            aria-label={`Email support at ${SUPPORT_EMAIL}`}
+          >
+            Support
+          </a>
+        </div>
       </div>
     </div>
   );
