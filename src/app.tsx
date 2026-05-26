@@ -2,8 +2,10 @@ import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { createStarterTemplate } from './utils/template';
 import { createShape, ShapeType } from './utils/shapes';
+import packageJson from '../package.json';
 import './assets/style.css';
 
+export const APP_VERSION = packageJson.version;
 export const SUPPORT_EMAIL = 'rich@userneedsmapping.com';
 export const SUPPORT_MAILTO = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(
   'User Needs Mapping Miro app support'
@@ -247,6 +249,12 @@ const App: React.FC = () => {
           >
             Support
           </a>
+          <span className="footer-link-separator" aria-hidden="true">
+            &middot;
+          </span>
+          <span className="footer-version" aria-label={`App version ${APP_VERSION}`}>
+            v{APP_VERSION}
+          </span>
         </div>
       </div>
     </div>

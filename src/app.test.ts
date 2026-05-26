@@ -1,5 +1,6 @@
 import { describe, it, expect, type Mock } from 'vitest';
 import {
+  APP_VERSION,
   LINKING_HINT_MESSAGE,
   SUPPORT_EMAIL,
   SUPPORT_MAILTO,
@@ -49,6 +50,12 @@ describe('support contact', () => {
   it('builds a mailto URL with the support email', () => {
     expect(SUPPORT_MAILTO).toContain(`mailto:${SUPPORT_EMAIL}`);
     expect(SUPPORT_MAILTO).toContain('subject=');
+  });
+});
+
+describe('APP_VERSION', () => {
+  it('is a non-empty semantic version string', () => {
+    expect(APP_VERSION).toMatch(/^\d+\.\d+\.\d+/);
   });
 });
 

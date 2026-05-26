@@ -286,3 +286,8 @@ img {
 .footer-link-separator {
   color: var(--secondary-text-color);
 }
+
+.footer-version {
+  color: var(--secondary-text-color);
+  font-variant-numeric: tabular-nums;
+}
