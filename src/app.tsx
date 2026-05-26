@@ -122,6 +122,15 @@ const ShapeItem: React.FC<ShapeItemProps> = ({ type, label, children }) => {
 
 const App: React.FC = () => {
   const [isCreatingTemplate, setIsCreatingTemplate] = React.useState(false);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  // Miro hosts the app inside an iframe, and browsers do not naturally
+  // descend Tab focus into a child iframe until something inside it has
+  // taken focus. We pull focus onto the (non-visible) panel container on
+  // mount so the user's next Tab moves to the first interactive tile.
+  React.useEffect(() => {
+    containerRef.current?.focus({ preventScroll: true });
+  }, []);
 
   const handleCreateTemplate = async () => {
     setIsCreatingTemplate(true);
@@ -135,7 +144,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="panel-container">
+    <div className="panel-container" ref={containerRef} tabIndex={-1}>
       <div className="shape-section">
         <h3 className="section-title">Users & Needs</h3>
         <div className="shape-grid">
