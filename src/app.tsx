@@ -94,31 +94,32 @@ interface ShapeItemProps {
 }
 
 const ShapeItem: React.FC<ShapeItemProps> = ({ type, label, children }) => {
-  const handleKeyDown = async (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key !== 'Enter' && event.key !== ' ') return;
-    event.preventDefault();
+  // A real <button> is natively focusable and tab-stoppable, handles
+  // Enter/Space activation for free, and works for both mouse click
+  // (adds the shape at the viewport centre) and drag (Miro's SDK handles
+  // the drop via the `miro-draggable` class on the same element).
+  const handleActivate = async () => {
     try {
       await addShapeAtViewportCenter(type);
     } catch (error) {
-      console.error('Failed to add shape via keyboard:', error);
+      console.error('Failed to add shape:', error);
     }
   };
 
   return (
-    <div
+    <button
+      type="button"
       className="miro-draggable shape-item"
       data-shape-type={type}
-      title={`Drag, or press Enter, to add ${label}`}
-      role="button"
-      tabIndex={0}
+      title={`Drag, or click, to add ${label}`}
       aria-label={`Add ${label} to the board`}
-      onKeyDown={handleKeyDown}
+      onClick={handleActivate}
     >
-      <div className="shape-preview" aria-hidden="true">
+      <span className="shape-preview" aria-hidden="true">
         {children}
-      </div>
+      </span>
       <span className="shape-label">{label}</span>
-    </div>
+    </button>
   );
 };
 

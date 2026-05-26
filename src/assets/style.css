@@ -78,17 +78,25 @@ img {
   gap: var(--space-small);
 }
 
-/* Shape Item (Draggable) */
+/* Shape Item (Draggable) — rendered as a real <button> so it is in the
+   tab order natively and Enter/Space activates it without custom code.
+   These rules strip the browser button defaults so it looks like the
+   tile design, not an OS button. */
 .shape-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
   padding: var(--space-xsmall);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   cursor: grab;
   transition: all 0.15s ease;
   background: var(--app-background-color);
+  color: inherit;
+  font: inherit;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .shape-item:hover {
