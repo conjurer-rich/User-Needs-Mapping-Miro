@@ -4,7 +4,7 @@ import {
   SUPPORT_EMAIL,
   SUPPORT_MAILTO,
   addShapeAtViewportCenter,
-  createShapeAndZoom,
+  createShapeAt,
   showLinkingShortcutHint,
 } from './app';
 import { getCreatedShapes } from './test/miro-mock';
@@ -52,9 +52,9 @@ describe('support contact', () => {
   });
 });
 
-describe('createShapeAndZoom', () => {
+describe('createShapeAt', () => {
   it('creates the requested shape at the given coordinates', async () => {
-    await createShapeAndZoom('userNeed', 100, 200);
+    await createShapeAt('userNeed', 100, 200);
 
     const shapes = getCreatedShapes();
     expect(shapes.length).toBeGreaterThan(0);
@@ -62,21 +62,14 @@ describe('createShapeAndZoom', () => {
     expect(shapes[0].y).toBe(200);
   });
 
-  it('zooms to the created items so they are visible', async () => {
-    await createShapeAndZoom('userNeed', 50, 75);
+  // The drop event already drops the shape at the user's cursor and
+  // keyboard activation drops at viewport centre — both already visible.
+  // We deliberately do not zoom in on a single small shape because that
+  // is jarring and loses surrounding context.
+  it('does not zoom the viewport when a single shape is added', async () => {
+    await createShapeAt('userNeed', 50, 75);
 
-    expect(miro.board.viewport.zoomTo).toHaveBeenCalledTimes(1);
-    const passedItems = (miro.board.viewport.zoomTo as Mock).mock.calls[0][0];
-    expect(Array.isArray(passedItems)).toBe(true);
-    expect(passedItems.length).toBeGreaterThan(0);
-  });
-
-  it('does not throw when zoomTo fails', async () => {
-    (miro.board.viewport.zoomTo as Mock).mockRejectedValueOnce(
-      new Error('zoom failed')
-    );
-
-    await expect(createShapeAndZoom('userNeed', 0, 0)).resolves.toBeDefined();
+    expect(miro.board.viewport.zoomTo).not.toHaveBeenCalled();
   });
 });
 
@@ -94,11 +87,5 @@ describe('addShapeAtViewportCenter', () => {
     const shapes = getCreatedShapes();
     expect(shapes[0].x).toBe(1400);
     expect(shapes[0].y).toBe(2300);
-  });
-
-  it('also zooms to the new shape', async () => {
-    await addShapeAtViewportCenter('userNeed');
-
-    expect(miro.board.viewport.zoomTo).toHaveBeenCalled();
   });
 });

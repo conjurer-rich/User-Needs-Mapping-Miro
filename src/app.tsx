@@ -25,24 +25,25 @@ export async function showLinkingShortcutHint() {
   }
 }
 
-async function zoomToCreatedItems(items: Awaited<ReturnType<typeof createShape>>) {
-  if (!items.length) return;
-  try {
-    await miro.board.viewport.zoomTo(items);
-  } catch (error) {
-    console.error('Failed to zoom to created shape:', error);
-  }
-}
-
-export async function createShapeAndZoom(shapeType: ShapeType, x: number, y: number) {
-  const items = await createShape(shapeType, x, y);
-  await zoomToCreatedItems(items);
-
+async function trackShapeCreation() {
   createdShapesCount += 1;
   if (!hasShownLinkingHint && createdShapesCount === 2) {
     hasShownLinkingHint = true;
     await showLinkingShortcutHint();
   }
+}
+
+// Creates a shape at the given board coordinates and updates session
+// tracking (e.g. for showing the linking-shortcut hint).
+//
+// We intentionally do NOT call `viewport.zoomTo()` here: drag-and-drop
+// places the shape at the cursor and keyboard activation places it at
+// the viewport centre, so the new shape is always already visible.
+// Calling zoomTo on a small individual shape zooms the canvas in so
+// far that surrounding context is lost.
+export async function createShapeAt(shapeType: ShapeType, x: number, y: number) {
+  const items = await createShape(shapeType, x, y);
+  await trackShapeCreation();
   return items;
 }
 
@@ -50,7 +51,7 @@ export async function addShapeAtViewportCenter(shapeType: ShapeType) {
   const viewport = await miro.board.viewport.get();
   const centerX = viewport.x + viewport.width / 2;
   const centerY = viewport.y + viewport.height / 2;
-  return createShapeAndZoom(shapeType, centerX, centerY);
+  return createShapeAt(shapeType, centerX, centerY);
 }
 
 // Register drop handler for drag-and-drop from panel to board
@@ -72,7 +73,7 @@ async function initDropHandler() {
     }
 
     try {
-      await createShapeAndZoom(shapeType, x, y);
+      await createShapeAt(shapeType, x, y);
     } catch (error) {
       console.error(`Failed to create shape:`, error);
     }
