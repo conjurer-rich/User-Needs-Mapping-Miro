@@ -96,10 +96,9 @@ img {
   background: var(--hover-color);
 }
 
-.shape-item:focus {
-  outline: none;
-}
-
+/* Always show a visible focus ring when a shape tile is focused so
+   keyboard users (and reviewers) can clearly see where Tab is. */
+.shape-item:focus,
 .shape-item:focus-visible {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
@@ -268,10 +267,20 @@ img {
   text-decoration: underline;
 }
 
+.footer-link:focus,
 .footer-link:focus-visible {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
   border-radius: 2px;
+}
+
+/* mirotone removes outline on .button:focus; restore it for the Create
+   Frame button so keyboard users see when it is focused. */
+.template-button:focus,
+.template-button:focus-visible {
+  outline: 2px solid var(--white, #FFFFFF);
+  outline-offset: -4px;
+  box-shadow: 0 0 0 2px var(--primary-color);
 }
 
 .footer-link-separator {
