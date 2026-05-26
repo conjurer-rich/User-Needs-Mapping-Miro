@@ -28,13 +28,6 @@ img {
   padding: var(--space-medium);
 }
 
-/* Container is programmatically focused on mount so Tab descends into
-   the iframe; it should not show a visible focus ring itself. */
-.panel-container:focus,
-.panel-container:focus-visible {
-  outline: none;
-}
-
 .panel-title {
   font-size: 16px;
   font-weight: 600;
@@ -104,13 +97,16 @@ img {
   background: var(--hover-color);
 }
 
-/* Always show a visible focus ring when a shape tile is focused so
-   keyboard users (and reviewers) can clearly see where Tab is. */
+/* Selection state: a single click (or Tab) gives the tile focus and
+   shows a thick blue ring + tinted background so the user clearly sees
+   which tile is selected. Double-click or Enter then adds the shape. */
 .shape-item:focus,
 .shape-item:focus-visible {
-  outline: 2px solid var(--primary-color);
+  outline: 3px solid var(--primary-color);
   outline-offset: 2px;
   border-color: var(--primary-color);
+  background: var(--hover-color);
+  box-shadow: 0 0 0 1px var(--primary-color);
 }
 
 .shape-item:active {

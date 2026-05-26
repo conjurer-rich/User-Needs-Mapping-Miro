@@ -94,11 +94,13 @@ interface ShapeItemProps {
 }
 
 const ShapeItem: React.FC<ShapeItemProps> = ({ type, label, children }) => {
-  // A real <button> is natively focusable and tab-stoppable, handles
-  // Enter/Space activation for free, and works for both mouse click
-  // (adds the shape at the viewport centre) and drag (Miro's SDK handles
-  // the drop via the `miro-draggable` class on the same element).
-  const handleActivate = async () => {
+  // Interaction model:
+  //   - single click selects (the native <button> takes focus, revealing
+  //     the selection border so the user knows where they are)
+  //   - double click adds the shape at the viewport centre
+  //   - Enter / Space adds (keyboard equivalent of double-click)
+  //   - drag still uses Miro's SDK via the `miro-draggable` class
+  const handleAdd = async () => {
     try {
       await addShapeAtViewportCenter(type);
     } catch (error) {
@@ -106,14 +108,21 @@ const ShapeItem: React.FC<ShapeItemProps> = ({ type, label, children }) => {
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    handleAdd();
+  };
+
   return (
     <button
       type="button"
       className="miro-draggable shape-item"
       data-shape-type={type}
-      title={`Drag, or click, to add ${label}`}
+      title={`Drag, double-click, or press Enter to add ${label}`}
       aria-label={`Add ${label} to the board`}
-      onClick={handleActivate}
+      onDoubleClick={handleAdd}
+      onKeyDown={handleKeyDown}
     >
       <span className="shape-preview" aria-hidden="true">
         {children}
@@ -125,15 +134,6 @@ const ShapeItem: React.FC<ShapeItemProps> = ({ type, label, children }) => {
 
 const App: React.FC = () => {
   const [isCreatingTemplate, setIsCreatingTemplate] = React.useState(false);
-  const containerRef = React.useRef<HTMLDivElement>(null);
-
-  // Miro hosts the app inside an iframe, and browsers do not naturally
-  // descend Tab focus into a child iframe until something inside it has
-  // taken focus. We pull focus onto the (non-visible) panel container on
-  // mount so the user's next Tab moves to the first interactive tile.
-  React.useEffect(() => {
-    containerRef.current?.focus({ preventScroll: true });
-  }, []);
 
   const handleCreateTemplate = async () => {
     setIsCreatingTemplate(true);
@@ -147,7 +147,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="panel-container" ref={containerRef} tabIndex={-1}>
+    <div className="panel-container">
       <div className="shape-section">
         <h3 className="section-title">Users & Needs</h3>
         <div className="shape-grid">
